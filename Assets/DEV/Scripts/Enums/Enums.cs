@@ -78,4 +78,13 @@ namespace DEV.Scripts.Enums
         OutOfMoves = 2,
         // Buraya ihtiyacınıza göre daha fazla fail reason ekleyebilirsiniz
     }
+    
+    /// <summary>
+    /// Frame shape tipleri
+    /// </summary>
+    public enum FrameType
+    {
+        LBig = 0,
+        LSmall = 1,
+    }
 }

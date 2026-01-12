@@ -185,6 +185,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Template
       objectReference: {fileID: 0}
+    - target: {fileID: 7146753496132280568, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: orthographic size
+      value: 14.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057726777900422919, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7933534
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057726777900422919, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.60876137
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057726777900422919, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057726777900422919, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8057726777900422919, guid: dc36becf1f4d147fb8d45877a422fcf7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

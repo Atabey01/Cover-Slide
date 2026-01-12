@@ -28,7 +28,7 @@ namespace DEV.Scripts.Managers
             AddListeners(_inputHandler);
 
             StateManager.OnGameStateChanged += OnGameStateChange;
-            
+
             StateManager.SetGameState(GameState.Pause);
             StateManager.SetGameState(GameState.Loading);
             StateManager.SetPopupState(PopupState.None);
@@ -45,10 +45,12 @@ namespace DEV.Scripts.Managers
             }
 
             var levelID = DataSaver.GetLevelId() + 1;
-            
+
             Debug.Log("Starting Level: " + levelID + " | LavelName: " + levelData.name);
 
             StartControllers(levelData);
+            _gameController = new GameController();
+            _gameController.StartNewLevel(levelData);
         }
 
         private void DestroyLevel()
@@ -155,8 +157,6 @@ namespace DEV.Scripts.Managers
 
         private void CreateControllers()
         {
-            _gameController = new GameController();
-            AddController(_gameController);
         }
 
         private void StartControllers(LevelData levelData)
@@ -169,12 +169,15 @@ namespace DEV.Scripts.Managers
         {
             foreach (var controller in _controllers)
                 controller.Value.LevelDestroy();
+            _gameController?.LevelDestroy();
         }
 
         private void DisposeControllers()
         {
             foreach (var controller in _controllers)
                 controller.Value.Dispose();
+
+            _gameController?.Dispose();
         }
 
         #endregion

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FrameShapes
   m_EditorClassIdentifier: 
   shapes:
-  - {fileID: 11400000, guid: 4044ac19801104b3eade95ba07d588e5, type: 2}
   - {fileID: 11400000, guid: 959d5a97c3e4d4ee9994a11155af2819, type: 2}
+  - {fileID: 11400000, guid: 4044ac19801104b3eade95ba07d588e5, type: 2}

@@ -4,12 +4,8 @@ using UnityEngine;
 
 namespace DEV.Scripts.Controllers
 {
-    public class GameController : IController
+    public class GameController
     {
-        public void Initialize()
-        {
-        }
-
         public void StartNewLevel(LevelData levelData)
         {
         }

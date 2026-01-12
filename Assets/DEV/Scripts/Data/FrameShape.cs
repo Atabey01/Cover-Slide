@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DEV.Scripts.Enums;
 
 namespace DEV.Scripts.Data
 {
@@ -12,6 +13,9 @@ namespace DEV.Scripts.Data
         [Header("Shape Settings")]
         [Tooltip("Shape'in adı")]
         [SerializeField] public string shapeName = "New Shape";
+        
+        [Tooltip("Frame tipi")]
+        [SerializeField] public FrameType frameType = FrameType.LBig;
         
         [Header("Editor Settings")]
         [Tooltip("Editor'da görüntülenen grid boyutu (sadece editor için)")]

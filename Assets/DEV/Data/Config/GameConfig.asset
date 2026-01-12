@@ -16,3 +16,4 @@ MonoBehaviour:
   PlayerConfig: {fileID: 11400000, guid: 3bcadd869f09541e8b3cde462ef08a4a, type: 2}
   GameAssetsConfig: {fileID: 11400000, guid: 7a502ffd2ad984659b3eb5e302d4d46a, type: 2}
   GameEconData: {fileID: 11400000, guid: 32b36796caaa646e7a8ed68c03709528, type: 2}
+  FrameShapes: {fileID: 11400000, guid: 21c16ad7132ea4d7799f89c225ec73fd, type: 2}

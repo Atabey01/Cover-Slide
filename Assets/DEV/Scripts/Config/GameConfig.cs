@@ -18,5 +18,9 @@ namespace DEV.Scripts.Config
         
         [Header("Game Econ Config")]
         public GameEconData GameEconData;
+        
+        [Header("Frame Shapes")]
+        [Tooltip("Frame shapes database")]
+        public FrameShapes FrameShapes;
     }
 }

@@ -165,6 +165,9 @@ namespace DEV.Editor
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Shape Settings", EditorStyles.boldLabel);
             shape.shapeName = EditorGUILayout.TextField("Shape Name", shape.shapeName);
+            
+            // Frame Type
+            shape.frameType = (DEV.Scripts.Enums.FrameType)EditorGUILayout.EnumPopup("Frame Type", shape.frameType);
 
             EditorGUILayout.Space(10);
 

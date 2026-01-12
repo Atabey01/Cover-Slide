@@ -62,9 +62,6 @@ namespace DEV.Scripts.Data
         [SerializeField] public List<ObjectiveColumn> objectiveColumns = new List<ObjectiveColumn>();
         
         [Header("Frame Shapes")]
-        [Tooltip("Frame shapes database")]
-        [SerializeField] public FrameShapes frameShapes;
-        
         [Tooltip("Level'da yerleştirilmiş frame'ler (pozisyon + shape referansı)")]
         [SerializeField] public List<FramePlacement> framePlacements = new List<FramePlacement>();
     }

@@ -18,6 +18,8 @@ namespace DEV.Editor
         private static LevelEditor instance;
         private LevelConfig levelConfig;
         private string levelConfigPath = "Assets/DEV/Data/Config/LevelConfig.asset";
+        private string gameConfigPath = "Assets/DEV/Data/Config/GameConfig.asset";
+        private GameConfig gameConfig;
         
         private LevelListPanel levelListPanel;
         private LevelData selectedLevel;
@@ -79,6 +81,7 @@ namespace DEV.Editor
         {
             instance = this;
             LoadLevelConfig();
+            LoadGameConfig();
             
             if (levelConfig != null)
             {
@@ -96,6 +99,16 @@ namespace DEV.Editor
             if (levelConfig == null)
             {
                 Debug.LogError($"LevelConfig bulunamadı: {levelConfigPath}");
+            }
+        }
+        
+        private void LoadGameConfig()
+        {
+            gameConfig = AssetDatabase.LoadAssetAtPath<GameConfig>(gameConfigPath);
+            
+            if (gameConfig == null)
+            {
+                Debug.LogError($"GameConfig bulunamadı: {gameConfigPath}");
             }
         }
 
@@ -1325,38 +1338,36 @@ namespace DEV.Editor
             EditorGUILayout.LabelField("Frame Shapes:", EditorStyles.boldLabel);
             EditorGUILayout.Space(3);
             
-            // FrameShapes referansı
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("FrameShapes DB:", GUILayout.Width(120));
-            FrameShapes previousFrameShapes = selectedLevel != null ? selectedLevel.frameShapes : null;
-            if (selectedLevel != null)
+            // GameConfig'ten FrameShapes'i al
+            FrameShapes frameShapes = null;
+            if (gameConfig != null)
             {
-                selectedLevel.frameShapes = (FrameShapes)EditorGUILayout.ObjectField(
-                    selectedLevel.frameShapes, typeof(FrameShapes), false);
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            bool frameShapesChanged = EditorGUI.EndChangeCheck() && selectedLevel != null;
-            if (frameShapesChanged)
-            {
-                EditorUtility.SetDirty(selectedLevel);
-                // FrameShapes değiştiyse veya yeni bir FrameShapes seçildiyse refresh et
-                if (selectedLevel.frameShapes != previousFrameShapes)
-                {
-                    AssetDatabase.Refresh();
-                    Repaint();
-                }
+                frameShapes = gameConfig.FrameShapes;
             }
             
-            EditorGUILayout.Space(5);
+            // FrameShapes bilgilendirmesi
+            if (frameShapes == null)
+            {
+                EditorGUILayout.HelpBox("FrameShapes database not assigned in GameConfig. Please assign it in GameConfig asset.", MessageType.Warning);
+                EditorGUILayout.Space(5);
+            }
+            else
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("FrameShapes DB:", GUILayout.Width(120));
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField(frameShapes, typeof(FrameShapes), false);
+                EditorGUI.EndDisabledGroup();
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.Space(5);
+            }
             
             // Shape seçimi
-            if (selectedLevel != null && selectedLevel.frameShapes != null && selectedLevel.frameShapes.shapes != null)
+            if (frameShapes != null && frameShapes.shapes != null)
             {
                 EditorGUILayout.LabelField("Select Shape:", EditorStyles.miniLabel);
                 
-                int shapeCount = selectedLevel.frameShapes.shapes.Count;
+                int shapeCount = frameShapes.shapes.Count;
                 if (shapeCount > 0)
                 {
                     string[] shapeNames = new string[shapeCount + 1];
@@ -1365,7 +1376,7 @@ namespace DEV.Editor
                     
                     for (int i = 0; i < shapeCount; i++)
                     {
-                        var shape = selectedLevel.frameShapes.shapes[i];
+                        var shape = frameShapes.shapes[i];
                         if (shape != null)
                         {
                             // Her zaman önce asset adını kontrol et, sonra shapeName'i kullan
@@ -1413,9 +1424,9 @@ namespace DEV.Editor
                         }
                         else
                         {
-                            if (newIndex - 1 < selectedLevel.frameShapes.shapes.Count)
+                            if (newIndex - 1 < frameShapes.shapes.Count)
                             {
-                                selectedFrameShape = selectedLevel.frameShapes.shapes[newIndex - 1];
+                                selectedFrameShape = frameShapes.shapes[newIndex - 1];
                             }
                         }
                         Repaint();
