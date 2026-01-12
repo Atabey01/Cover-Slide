@@ -15,3 +15,60 @@ MonoBehaviour:
   levelName: Level-3
   skipInLoop: 0
   LevelDifficultyType: 0
+  gridSatirSayisi: 5
+  gridSutunSayisi: 5
+  cellDataList:
+  - gridPosition: {x: 0, y: 0}
+    colorType: 0
+  - gridPosition: {x: 1, y: 0}
+    colorType: 0
+  - gridPosition: {x: 2, y: 0}
+    colorType: 0
+  - gridPosition: {x: 3, y: 0}
+    colorType: 0
+  - gridPosition: {x: 4, y: 0}
+    colorType: 0
+  - gridPosition: {x: 0, y: 1}
+    colorType: 0
+  - gridPosition: {x: 1, y: 1}
+    colorType: 0
+  - gridPosition: {x: 2, y: 1}
+    colorType: 0
+  - gridPosition: {x: 3, y: 1}
+    colorType: 0
+  - gridPosition: {x: 4, y: 1}
+    colorType: 0
+  - gridPosition: {x: 0, y: 2}
+    colorType: 0
+  - gridPosition: {x: 1, y: 2}
+    colorType: 0
+  - gridPosition: {x: 2, y: 2}
+    colorType: 0
+  - gridPosition: {x: 3, y: 2}
+    colorType: 0
+  - gridPosition: {x: 4, y: 2}
+    colorType: 0
+  - gridPosition: {x: 0, y: 3}
+    colorType: 0
+  - gridPosition: {x: 1, y: 3}
+    colorType: 0
+  - gridPosition: {x: 2, y: 3}
+    colorType: 0
+  - gridPosition: {x: 3, y: 3}
+    colorType: 0
+  - gridPosition: {x: 4, y: 3}
+    colorType: 0
+  - gridPosition: {x: 0, y: 4}
+    colorType: 0
+  - gridPosition: {x: 1, y: 4}
+    colorType: 0
+  - gridPosition: {x: 2, y: 4}
+    colorType: 0
+  - gridPosition: {x: 3, y: 4}
+    colorType: 0
+  - gridPosition: {x: 4, y: 4}
+    colorType: 0
+  objectiveColumnGridRowCount: 1
+  objectiveColumns: []
+  frameShapes: {fileID: 0}
+  framePlacements: []

@@ -11,11 +11,12 @@ namespace DEV.Scripts.Editor
 {
     public class LevelEditorWindow : OdinEditorWindow
     {
-        [MenuItem("Window/Level Editor")]
-        private static void OpenWindow()
-        {
-            GetWindow<LevelEditorWindow>("Level Editor").Show();
-        }
+        // Menu item kaldırıldı - yeni LevelEditor kullanılıyor
+        // [MenuItem("Window/Level Editor")]
+        // private static void OpenWindow()
+        // {
+        //     GetWindow<LevelEditorWindow>("Level Editor").Show();
+        // }
 
         private LevelConfig levelConfig;
         private Vector2 leftScrollPosition;

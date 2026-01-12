@@ -15,3 +15,47 @@ MonoBehaviour:
   levelName: Level-1
   skipInLoop: 0
   LevelDifficultyType: 0
+  gridSatirSayisi: 4
+  gridSutunSayisi: 4
+  cellDataList:
+  - gridPosition: {x: 0, y: 0}
+    colorType: 0
+  - gridPosition: {x: 1, y: 0}
+    colorType: 0
+  - gridPosition: {x: 2, y: 0}
+    colorType: 0
+  - gridPosition: {x: 3, y: 0}
+    colorType: 0
+  - gridPosition: {x: 0, y: 1}
+    colorType: 0
+  - gridPosition: {x: 1, y: 1}
+    colorType: 0
+  - gridPosition: {x: 2, y: 1}
+    colorType: 0
+  - gridPosition: {x: 3, y: 1}
+    colorType: 0
+  - gridPosition: {x: 0, y: 2}
+    colorType: 0
+  - gridPosition: {x: 1, y: 2}
+    colorType: 0
+  - gridPosition: {x: 2, y: 2}
+    colorType: 0
+  - gridPosition: {x: 3, y: 2}
+    colorType: 0
+  - gridPosition: {x: 0, y: 3}
+    colorType: 0
+  - gridPosition: {x: 1, y: 3}
+    colorType: 0
+  - gridPosition: {x: 2, y: 3}
+    colorType: 0
+  - gridPosition: {x: 3, y: 3}
+    colorType: 0
+  objectiveColumnGridRowCount: 1
+  objectiveColumns:
+  - colors: 
+  frameShapes: {fileID: 11400000, guid: 21c16ad7132ea4d7799f89c225ec73fd, type: 2}
+  framePlacements:
+  - gridPosition: {x: 1, y: 2}
+    shape: {fileID: 11400000, guid: 959d5a97c3e4d4ee9994a11155af2819, type: 2}
+  - gridPosition: {x: 0, y: 0}
+    shape: {fileID: 11400000, guid: 4044ac19801104b3eade95ba07d588e5, type: 2}

@@ -31,14 +31,15 @@ namespace DEV.Scripts.Enums
     
     public enum ColorType
     {
-        Red = 0,
-        Blue = 1,
-        Green = 2,
-        Yellow = 3,
-        Purple = 4,
-        Orange = 5,
-        Cyan = 6,
-        Pink = 7,
+        None = 0,
+        Red = 1,
+        Blue = 2,
+        Green = 3,
+        Yellow = 4,
+        Purple = 5,
+        Orange = 6,
+        Cyan = 7,
+        Pink = 8,
     }
 
     /// <summary>
