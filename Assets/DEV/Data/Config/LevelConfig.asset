@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
   LoopStartLevel: 1
-  TestLevel: {fileID: 11400000, guid: b35d14604dcc540a4bbd96380a4c1e03, type: 2}
+  TestLevel: {fileID: 11400000, guid: ba6d3ffe7b76946d0908835802a18b96, type: 2}
   Levels:
   - {fileID: 11400000, guid: ba6d3ffe7b76946d0908835802a18b96, type: 2}
   - {fileID: 11400000, guid: 726c5c1c873c449349d7e62eba954122, type: 2}

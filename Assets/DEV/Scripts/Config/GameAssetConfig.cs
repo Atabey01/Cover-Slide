@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using DEV.Scripts.Gameplay;
 using UnityEngine;
 
 namespace DEV.Scripts.Config
@@ -11,6 +12,8 @@ namespace DEV.Scripts.Config
         
         [Header("Game Prefabs")] 
         [Space(10)]
+        public Stickman StickmanPrefab;
+        public GridObject GridObjectPrefab;
         
         [Header("Game Materials")]
         public SerializedDictionary<Enums.ColorType, Material> Materials = new();

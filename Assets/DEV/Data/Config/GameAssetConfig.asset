@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3b1413aa90d4fccba90462061cf133, type: 3}
   m_Name: GameAssetConfig
   m_EditorClassIdentifier: 
+  StickmanPrefab: {fileID: 7631288510111064756, guid: a3008677cf3ea40f1ba7cd33f5e56208,
+    type: 3}
+  GridObjectPrefab: {fileID: 1464719416895533057, guid: 95db79b342aa8417aac595446b01b742,
+    type: 3}
   Materials:
     _serializedList: []

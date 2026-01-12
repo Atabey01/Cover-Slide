@@ -25,7 +25,8 @@ namespace DEV.Scripts.Managers
             _inputHandler = inputHandler;
             _controllers = new Dictionary<Type, IController>();
             CreateControllers();
-            AddListeners(_inputHandler);
+            // Don't add listeners here - _gameController is not created yet
+            // Listeners will be added in StartNewLevel() after _gameController is created
 
             StateManager.OnGameStateChanged += OnGameStateChange;
 
@@ -51,6 +52,9 @@ namespace DEV.Scripts.Managers
             StartControllers(levelData);
             _gameController = new GameController();
             _gameController.StartNewLevel(levelData);
+            
+            // Add listeners after _gameController is created
+            AddListeners(_inputHandler);
         }
 
         private void DestroyLevel()
@@ -120,9 +124,19 @@ namespace DEV.Scripts.Managers
 
         void AddListeners(InputHandler inputHandler)
         {
-            inputHandler.OnMouseDown += _gameController.MouseDown;
-            inputHandler.OnMouseUp += _gameController.MouseUp;
-            inputHandler.OnMouseDrag += _gameController.MouseDrag;
+            if (inputHandler == null) return;
+            
+            // Remove listeners first to avoid duplicates
+            RemoveListeners(inputHandler);
+            
+            // Add listeners only if _gameController exists
+            if (_gameController != null)
+            {
+                inputHandler.OnMouseDown += _gameController.MouseDown;
+                inputHandler.OnMouseUp += _gameController.MouseUp;
+                inputHandler.OnMouseDrag += _gameController.MouseDrag;
+            }
+            
             inputHandler.StartInput += StartInput;
         }
 
