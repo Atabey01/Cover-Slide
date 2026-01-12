@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9e0f9e1663548eb9151a6f9e164d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 9001571973908523352}
 --- !u!1001 &3414425627678205228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,6 +117,12 @@ PrefabInstance:
 --- !u!4 &3941645147232472997 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1860535732822665865, guid: 65501d24f65ed476c9b4a7f7bcaeeef2,
+    type: 3}
+  m_PrefabInstance: {fileID: 3414425627678205228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9001571973908523352 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6020881693459745908, guid: 65501d24f65ed476c9b4a7f7bcaeeef2,
     type: 3}
   m_PrefabInstance: {fileID: 3414425627678205228}
   m_PrefabAsset: {fileID: 0}

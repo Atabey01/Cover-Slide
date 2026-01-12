@@ -17,4 +17,23 @@ MonoBehaviour:
   GridObjectPrefab: {fileID: 1464719416895533057, guid: 95db79b342aa8417aac595446b01b742,
     type: 3}
   Materials:
-    _serializedList: []
+    _serializedList:
+    - Key: 1
+      Value: {fileID: 2100000, guid: c9c21ceb00ae441558086efeb26198aa, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: ec251d44e76eb4ee8bf78d8809cbb47f, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: b92a5402233d9453ebb73c130b826e60, type: 2}
+    - Key: 4
+      Value: {fileID: 2100000, guid: f1a3f5d09aef14c3e9b29e427e62177f, type: 2}
+    - Key: 5
+      Value: {fileID: 2100000, guid: 30f98b59bc6e14cf09deea8667270462, type: 2}
+    - Key: 6
+      Value: {fileID: 2100000, guid: 8e2a1c3de325e4d8f8d1b695edf9ef3f, type: 2}
+    - Key: 7
+      Value: {fileID: 2100000, guid: 3f3a148093e194650905b38ee13262a8, type: 2}
+    - Key: 8
+      Value: {fileID: 2100000, guid: bcb08fdca6a3f4ab189816e5c141bd93, type: 2}
+  GridMaterials:
+  - {fileID: 2100000, guid: 87ce5ccb188374acca64ce37195606dc, type: 2}
+  - {fileID: 2100000, guid: 03270e10748264b59bce7cb66c9088c9, type: 2}

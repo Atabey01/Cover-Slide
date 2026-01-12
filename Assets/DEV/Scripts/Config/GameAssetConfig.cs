@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using DEV.Scripts.Gameplay;
 using UnityEngine;
@@ -17,5 +18,6 @@ namespace DEV.Scripts.Config
         
         [Header("Game Materials")]
         public SerializedDictionary<Enums.ColorType, Material> Materials = new();
+        public List<Material> GridMaterials = new();
     }
 }
