@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: L_Big
   m_EditorClassIdentifier: 
   shapeName: L_Big
+  frameType: 0
   editorGridSize: {x: 3, y: 3}
   cells:
   - {x: 0, y: 0}

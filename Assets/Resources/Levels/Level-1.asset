@@ -27,30 +27,34 @@ MonoBehaviour:
   - gridPosition: {x: 3, y: 0}
     colorType: 0
   - gridPosition: {x: 0, y: 1}
-    colorType: 0
+    colorType: 1
   - gridPosition: {x: 1, y: 1}
-    colorType: 0
+    colorType: 1
   - gridPosition: {x: 2, y: 1}
-    colorType: 0
+    colorType: 1
   - gridPosition: {x: 3, y: 1}
     colorType: 0
   - gridPosition: {x: 0, y: 2}
-    colorType: 0
+    colorType: 1
   - gridPosition: {x: 1, y: 2}
-    colorType: 0
+    colorType: 4
   - gridPosition: {x: 2, y: 2}
-    colorType: 0
+    colorType: 4
   - gridPosition: {x: 3, y: 2}
-    colorType: 0
+    colorType: 4
   - gridPosition: {x: 0, y: 3}
-    colorType: 0
+    colorType: 1
   - gridPosition: {x: 1, y: 3}
-    colorType: 0
+    colorType: 4
   - gridPosition: {x: 2, y: 3}
-    colorType: 0
+    colorType: 4
   - gridPosition: {x: 3, y: 3}
-    colorType: 0
+    colorType: 4
   objectiveColumnGridRowCount: 1
   objectiveColumns:
   - colors: 
-  framePlacements: []
+  framePlacements:
+  - gridPosition: {x: 2, y: 1}
+    shape: {fileID: 11400000, guid: 959d5a97c3e4d4ee9994a11155af2819, type: 2}
+  - gridPosition: {x: 0, y: 0}
+    shape: {fileID: 11400000, guid: 959d5a97c3e4d4ee9994a11155af2819, type: 2}

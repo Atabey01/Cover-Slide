@@ -17,6 +17,13 @@ namespace DEV.Scripts.Config
         public LevelData GetLevel()
         {
 #if UNITY_EDITOR
+            if (TestLevel != null)
+            {
+                var lvl = TestLevel;
+                TestLevel = null;
+                return lvl;
+            }
+
             var testLevelIndex = PlayerPrefs.GetInt("TestLevelIndex", -1);
             if (testLevelIndex >= 0)
             {

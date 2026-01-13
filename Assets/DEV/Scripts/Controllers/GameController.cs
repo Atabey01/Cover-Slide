@@ -70,12 +70,30 @@ namespace DEV.Scripts.Controllers
             // GridParent stays at Vector3.zero
             GridParent.transform.position = Vector3.zero;
 
+            // Create CellData dictionary (for fast access)
+            Dictionary<Vector2Int, ColorType> cellDataDict = new Dictionary<Vector2Int, ColorType>();
+            if (levelData.cellDataList != null)
+            {
+                foreach (var cellData in levelData.cellDataList)
+                {
+                    if (cellData != null)
+                    {
+                        cellDataDict[cellData.gridPosition] = cellData.colorType;
+                    }
+                }
+            }
+
             // Create all grid cells in local space
             for (int row = 0; row < rowCount; row++)
             {
                 for (int col = 0; col < columnCount; col++)
                 {
                     Vector2Int gridPos = new Vector2Int(col, row);
+
+                    // Get colorType from CellData (None if not found)
+                    ColorType colorType = cellDataDict.ContainsKey(gridPos)
+                        ? cellDataDict[gridPos]
+                        : ColorType.None;
 
                     // Calculate local position (0,0 as bottom-left corner)
                     // X: centered (negative half width + column offset)
@@ -97,7 +115,7 @@ namespace DEV.Scripts.Controllers
                         gridObj.name = $"GridCell_{col}_{row}";
                         _gridObjects[gridPos] = gridObj;
 
-                        gridObj.Initialize(row, col, _gameConfig);
+                        gridObj.Initialize(row, col, colorType, _gameConfig);
                     }
                 }
             }
@@ -190,92 +208,37 @@ namespace DEV.Scripts.Controllers
                 return;
             }
 
-            if (levelData.cellDataList == null || levelData.cellDataList.Count == 0)
+            // Iterate through grid objects and create stickmans for non-None color types
+            foreach (var kvp in _gridObjects)
             {
-                Debug.LogWarning("GameController.CreateStickmans: cellDataList is empty!");
-                return;
-            }
+                Vector2Int gridPos = kvp.Key;
+                GridObject gridObj = kvp.Value;
 
-            int rowCount = levelData.gridSatirSayisi;
-            int columnCount = levelData.gridSutunSayisi;
+                // Skip if colorType is None
+                if (gridObj.ColorType == ColorType.None)
+                    continue;
 
-            // Calculate grid dimensions
-            float gridWidth = (columnCount * (CELL_SIZE + CELL_SPACING)) - CELL_SPACING;
-            float gridHeight = (rowCount * (CELL_SIZE + CELL_SPACING)) - CELL_SPACING;
+                // Use grid cell's position (slightly elevated)
+                Vector3 gridPos3D = gridObj.transform.position;
+                Vector3 stickmanPos = new Vector3(gridPos3D.x, gridPos3D.y, gridPos3D.z);
 
-            // StickmanParent stays at Vector3.zero (same as GridParent)
-            StickmanParent.transform.position = Vector3.zero;
+                // Create stickman using Factory with pooling
+                Stickman stickman = Factory.Create<Stickman>(
+                    _gameConfig.GameAssetsConfig.StickmanPrefab.gameObject,
+                    StickmanParent.transform,
+                    usePooling: true
+                );
 
-            // Create CellData dictionary (for fast access)
-            Dictionary<Vector2Int, ColorType> cellDataDict = new Dictionary<Vector2Int, ColorType>();
-            foreach (var cellData in levelData.cellDataList)
-            {
-                if (cellData != null)
+                if (stickman != null)
                 {
-                    cellDataDict[cellData.gridPosition] = cellData.colorType;
-                }
-            }
+                    stickman.transform.position = stickmanPos;
+                    stickman.name = $"Stickman_{gridObj.ColorType}";
 
-            // Check each cell and create stickman
-            for (int row = 0; row < rowCount; row++)
-            {
-                for (int col = 0; col < columnCount; col++)
-                {
-                    Vector2Int gridPos = new Vector2Int(col, row);
+                    // Initialize stickman with grid cell's colorType
+                    stickman.Initialize(gridObj.ColorType, _gameConfig);
+                    gridObj.Stickman = stickman;
 
-                    // Get colorType from CellData (None if not found)
-                    ColorType colorType = cellDataDict.ContainsKey(gridPos)
-                        ? cellDataDict[gridPos]
-                        : ColorType.None;
-
-                    // Create stickman for non-None cells
-                    if (colorType != ColorType.None)
-                    {
-                        // Calculate local position (same as grid cells)
-                        float localX = -(gridWidth * 0.5f) + (col * (CELL_SIZE + CELL_SPACING)) + (CELL_SIZE * 0.5f);
-                        float localZ = rowCount - 1 - (row * (CELL_SIZE + CELL_SPACING)) - (CELL_SIZE * 0.5f);
-                        Vector3 localPos = new Vector3(localX, 0.5f, localZ); // Slightly elevated
-
-                        // Create stickman using Factory with pooling
-                        Stickman stickman = Factory.Create<Stickman>(
-                            _gameConfig.GameAssetsConfig.StickmanPrefab.gameObject,
-                            StickmanParent.transform,
-                            usePooling: true
-                        );
-
-                        if (stickman != null)
-                        {
-                            stickman.transform.localPosition = localPos;
-                            stickman.name = $"Stickman_{col}_{row}_{colorType}";
-
-                            // Set material based on colorType
-                            if (_gameConfig.GameAssetsConfig.Materials != null &&
-                                _gameConfig.GameAssetsConfig.Materials.ContainsKey(colorType))
-                            {
-                                Material material = _gameConfig.GameAssetsConfig.Materials[colorType];
-                                if (material != null)
-                                {
-                                    // Find Renderer component and set material
-                                    Renderer renderer = stickman.GetComponent<Renderer>();
-                                    if (renderer != null)
-                                    {
-                                        renderer.material = material;
-                                    }
-                                    else
-                                    {
-                                        // If no direct Renderer, search in children
-                                        renderer = stickman.GetComponentInChildren<Renderer>();
-                                        if (renderer != null)
-                                        {
-                                            renderer.material = material;
-                                        }
-                                    }
-                                }
-                            }
-
-                            _stickmans[gridPos] = stickman;
-                        }
-                    }
+                    _stickmans[gridPos] = stickman;
                 }
             }
         }

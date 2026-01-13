@@ -1,4 +1,5 @@
 using DEV.Scripts.Config;
+using DEV.Scripts.Enums;
 using UnityEngine;
 
 namespace DEV.Scripts.Gameplay
@@ -6,8 +7,11 @@ namespace DEV.Scripts.Gameplay
     public class GridObject : MonoBehaviour
     {
         [SerializeField] private Renderer renderer;
-        public void Initialize(int row, int col, GameConfig gameConfig)
+        public ColorType ColorType;
+        public Stickman Stickman;
+        public void Initialize(int row, int col, ColorType colorType, GameConfig gameConfig)
         {
+            ColorType = colorType;
             SetColor(row, col, gameConfig);
         }
 

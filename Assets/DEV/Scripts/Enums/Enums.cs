@@ -21,6 +21,17 @@ namespace DEV.Scripts.Enums
         HardLevelPopUp = 4,
         NewFeaturePopUp = 5,
     }
+    
+    public enum StickmanAnimationType
+    {
+        Idle = 0,
+        Crouch = 1,
+        Run = 2,
+        Jump1 = 3,
+        Jump2 = 4,
+        Jump3 = 5,
+        
+    }
 
     public enum LevelDifficultyType
     {

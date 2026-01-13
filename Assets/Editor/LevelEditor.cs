@@ -59,6 +59,12 @@ namespace DEV.Editor
         private Vector2 gridScrollPosition = Vector2.zero;
         private float baseCellSize = 30f;
         private bool showGridCoordinates = false;
+        
+        // Frame visual settings
+        private bool frameVisualsFoldout = false;
+        private float frameOutlineThickness = 3f;
+        private Color frameFillColor = new Color(0f, 1f, 1f, 0.3f);
+        private Color frameOutlineColor = Color.white;
 
         public static LevelEditor Instance
         {
@@ -485,6 +491,32 @@ namespace DEV.Editor
                 EditorGUILayout.EndHorizontal();
                 
                 showGridCoordinates = EditorGUILayout.Toggle("Show Coordinates", showGridCoordinates);
+                
+                EditorGUILayout.Space(5);
+                
+                frameVisualsFoldout = EditorGUILayout.Foldout(frameVisualsFoldout, "Frame Visual Settings", true, EditorStyles.foldoutHeader);
+                
+                if (frameVisualsFoldout)
+                {
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Outline Size:", GUILayout.Width(80));
+                    frameOutlineThickness = EditorGUILayout.Slider(frameOutlineThickness, 1f, 10f);
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Outline Color:", GUILayout.Width(80));
+                    frameOutlineColor = EditorGUILayout.ColorField(frameOutlineColor);
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Frame Color:", GUILayout.Width(80));
+                    frameFillColor = EditorGUILayout.ColorField(frameFillColor);
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.EndVertical();
+                }
                 
                 EditorGUILayout.EndVertical();
                 
@@ -1176,10 +1208,14 @@ namespace DEV.Editor
         {
             if (selectedLevel.framePlacements == null) return;
             
-            Color frameFillColor = new Color(0f, 1f, 1f, 0.3f); // Cyan, cam gibi, 0.3f opaklık
-            Color frameOutlineColor = Color.white; // Beyaz, 1 opaklık
-            float outlineThickness = 3f; // Kalın kenarlık
+            // UI'dan alınan değerler
+            // frameFillColor ve frameOutlineColor sınıf değişkenleri kullanılıyor
+             
+            float outlineThickness = frameOutlineThickness; 
             
+            float gridRightEdge = gridAreaX + (sutunSayisi * totalCellSize) - cellSpacing;
+            float gridTopEdge = gridAreaY + (satirSayisi * totalCellSize) - cellSpacing;
+
             foreach (var placement in selectedLevel.framePlacements)
             {
                 if (placement == null || placement.shape == null || placement.shape.cells == null) continue;
@@ -1205,12 +1241,7 @@ namespace DEV.Editor
                 // Eğer frame grid dışına taşıyorsa, hiç çizme
                 if (!isFrameValid || frameCells.Count == 0) continue;
                 
-                // Frame'in iç kısmını çiz
-                // Grid hücreleriyle aynı pozisyon ve boyutta çiz (cellSize kullan)
-                // Kesintisiz görünüm için komşu hücreler arasındaki boşluğu da doldur
-                float gridRightEdge = gridAreaX + (sutunSayisi * totalCellSize) - cellSpacing;
-                float gridTopEdge = gridAreaY + (satirSayisi * totalCellSize) - cellSpacing;
-                
+                // --- FILL DRAWING ---
                 foreach (var worldPos in frameCells)
                 {
                     // Hücre pozisyonunu hesapla (grid hücreleriyle aynı şekilde)
@@ -1228,24 +1259,26 @@ namespace DEV.Editor
                         cellWidth = totalCellSize; // Komşu hücreyle birleş
                     }
                     
-                    // Üstte komşu hücre var mı? Varsa boşluğu doldur
-                    Vector2Int topNeighbor = new Vector2Int(worldPos.x, worldPos.y + 1);
-                    if (frameCells.Contains(topNeighbor))
+                    // Altta komşu hücre var mı? Varsa boşluğu doldur (Draws downwards)
+                    // NOT: Görselde Y aşağı arttığı için, alttaki hücreye (y-1) uzamak Height artırmaktır.
+                    Vector2Int bottomNeighbor = new Vector2Int(worldPos.x, worldPos.y - 1);
+                    if (frameCells.Contains(bottomNeighbor))
                     {
                         cellHeight = totalCellSize; // Komşu hücreyle birleş
                     }
                     
                     // Grid sınırlarını aşmamak için kontrol et
-                    if (cellX + cellWidth > gridRightEdge)
-                    {
-                        cellWidth = Mathf.Max(0, gridRightEdge - cellX);
-                    }
-                    if (cellY + cellHeight > gridTopEdge)
-                    {
-                        cellHeight = Mathf.Max(0, gridTopEdge - cellY);
-                    }
+                    if (cellX + cellWidth > gridRightEdge + cellSpacing) // Allow extending into spacing if contiguous
+                        cellWidth = Mathf.Min(cellWidth, (gridRightEdge + cellSpacing) - cellX);
+                    else if (cellX + cellWidth > gridRightEdge)
+                        cellWidth = Mathf.Min(cellWidth, gridRightEdge - cellX);
+
+                    if (cellY + cellHeight > gridTopEdge + cellSpacing)
+                         cellHeight = Mathf.Min(cellHeight, (gridTopEdge + cellSpacing) - cellY);
+                    else if (cellY + cellHeight > gridTopEdge)
+                        cellHeight = Mathf.Min(cellHeight, gridTopEdge - cellY);
                     
-                    // Hücreyi çiz (grid sınırları içinde kalacak şekilde)
+                    // Hücreyi çiz
                     if (cellWidth > 0 && cellHeight > 0)
                     {
                         Rect cellRect = new Rect(cellX, cellY, cellWidth, cellHeight);
@@ -1253,81 +1286,119 @@ namespace DEV.Editor
                     }
                 }
                 
-                // Frame'in dış kenarlığını çiz (beyaz, kalın)
-                // Her hücrenin komşularını kontrol et, eğer komşu frame'in parçası değilse o kenar dış kenardır
+                // --- OUTLINE DRAWING ---
                 Handles.color = frameOutlineColor;
-                
-                // gridRightEdge ve gridTopEdge zaten yukarıda tanımlı, tekrar tanımlamaya gerek yok
                 
                 foreach (var worldPos in frameCells)
                 {
-                    // Hücre pozisyonunu hesapla (grid hücreleriyle aynı şekilde)
                     float cellX = gridAreaX + (worldPos.x * totalCellSize);
                     float cellY = gridAreaY + ((satirSayisi - 1 - worldPos.y) * totalCellSize);
                     
-                    // Hücre boyutu her zaman cellSize (grid hücreleriyle aynı)
-                    float cellWidth = cellSize;
-                    float cellHeight = cellSize;
-                    
-                    // Grid sınırlarını aşmamak için kontrol et
-                    if (cellX + cellWidth > gridRightEdge)
-                    {
-                        cellWidth = Mathf.Max(0, gridRightEdge - cellX);
-                    }
-                    if (cellY + cellHeight > gridTopEdge)
-                    {
-                        cellHeight = Mathf.Max(0, gridTopEdge - cellY);
-                    }
-                    
-                    if (cellWidth <= 0 || cellHeight <= 0) continue;
-                    
-                    // Üst kenar (eğer üstte komşu hücre yoksa)
+                    // Width/Height for continuity check (Forward/Down directions)
+                    float hLineLength = cellSize;
+                    Vector2Int rightNeighbor = new Vector2Int(worldPos.x + 1, worldPos.y);
+                    if (frameCells.Contains(rightNeighbor))
+                        hLineLength = totalCellSize;
+
+                    float vLineLength = cellSize;
+                    Vector2Int bottomNeighbor = new Vector2Int(worldPos.x, worldPos.y - 1);
+                    if (frameCells.Contains(bottomNeighbor))
+                        vLineLength = totalCellSize;
+
+                    // Neighbor Checks
                     Vector2Int topNeighbor = new Vector2Int(worldPos.x, worldPos.y + 1);
+                    Vector2Int leftNeighbor = new Vector2Int(worldPos.x - 1, worldPos.y);
+                    
+                    // --- Border Logic with Backward Extensions ---
+
+                    // 1. Top Edge (if no neighbor above)
                     if (!frameCells.Contains(topNeighbor))
                     {
-                        float lineEndX = Mathf.Min(cellX + cellWidth, gridRightEdge);
+                        float lineStartX = cellX;
+                        // Check for Inner Corner at Top-Left
+                        if (frameCells.Contains(leftNeighbor))
+                        {
+                            Vector2Int leftTopNeighbor = new Vector2Int(leftNeighbor.x, leftNeighbor.y + 1);
+                            if (frameCells.Contains(leftTopNeighbor))
+                            {
+                                lineStartX -= cellSpacing; // Extend Left
+                            }
+                        }
+
+                        float lineEndX = cellX + hLineLength;
+                        
                         Handles.DrawAAPolyLine(outlineThickness,
-                            new Vector3(cellX, cellY, 0),
+                            new Vector3(lineStartX, cellY, 0),
                             new Vector3(lineEndX, cellY, 0)
                         );
                     }
                     
-                    // Alt kenar (eğer altta komşu hücre yoksa)
-                    Vector2Int bottomNeighbor = new Vector2Int(worldPos.x, worldPos.y - 1);
+                    // 2. Bottom Edge (if no neighbor below)
                     if (!frameCells.Contains(bottomNeighbor))
                     {
-                        float lineY = cellY + cellHeight;
-                        float lineEndX = Mathf.Min(cellX + cellWidth, gridRightEdge);
+                        float lineY = cellY + cellSize;
+                        float lineStartX = cellX;
+                         // Check for Inner Corner at Bottom-Left
+                        if (frameCells.Contains(leftNeighbor))
+                        {
+                            Vector2Int leftBottomNeighbor = new Vector2Int(leftNeighbor.x, leftNeighbor.y - 1);
+                            if (frameCells.Contains(leftBottomNeighbor))
+                            {
+                                lineStartX -= cellSpacing; // Extend Left
+                            }
+                        }
+
+                        float lineEndX = cellX + hLineLength;
+                        
                         Handles.DrawAAPolyLine(outlineThickness,
-                            new Vector3(cellX, lineY, 0),
+                            new Vector3(lineStartX, lineY, 0),
                             new Vector3(lineEndX, lineY, 0)
                         );
                     }
                     
-                    // Sol kenar (eğer solda komşu hücre yoksa)
-                    Vector2Int leftNeighbor = new Vector2Int(worldPos.x - 1, worldPos.y);
+                    // 3. Left Edge (if no neighbor left)
                     if (!frameCells.Contains(leftNeighbor))
                     {
-                        float lineEndY = Mathf.Min(cellY + cellHeight, gridTopEdge);
+                        float lineStartY = cellY;
+                        // Check for Inner Corner at Top-Left (Relative to vertical line)
+                        if (frameCells.Contains(topNeighbor))
+                        {
+                            Vector2Int topLeftNeighbor = new Vector2Int(topNeighbor.x - 1, topNeighbor.y);
+                            if (frameCells.Contains(topLeftNeighbor))
+                            {
+                                lineStartY -= cellSpacing; // Extend Up
+                            }
+                        }
+
+                        float lineEndY = cellY + vLineLength;
+                        
                         Handles.DrawAAPolyLine(outlineThickness,
-                            new Vector3(cellX, cellY, 0),
+                            new Vector3(cellX, lineStartY, 0),
                             new Vector3(cellX, lineEndY, 0)
                         );
                     }
                     
-                    // Sağ kenar (eğer sağda komşu hücre yoksa)
-                    Vector2Int rightNeighbor = new Vector2Int(worldPos.x + 1, worldPos.y);
+                    // 4. Right Edge (if no neighbor right)
                     if (!frameCells.Contains(rightNeighbor))
                     {
-                        float lineX = cellX + cellWidth;
-                        float lineEndY = Mathf.Min(cellY + cellHeight, gridTopEdge);
-                        if (lineX <= gridRightEdge)
+                        float lineX = cellX + cellSize;
+                        float lineStartY = cellY;
+                        // Check for Inner Corner at Top-Right
+                        if (frameCells.Contains(topNeighbor))
                         {
-                            Handles.DrawAAPolyLine(outlineThickness,
-                                new Vector3(lineX, cellY, 0),
-                                new Vector3(lineX, lineEndY, 0)
-                            );
+                            Vector2Int topRightNeighbor = new Vector2Int(topNeighbor.x + 1, topNeighbor.y);
+                            if (frameCells.Contains(topRightNeighbor))
+                            {
+                                lineStartY -= cellSpacing; // Extend Up
+                            }
                         }
+
+                        float lineEndY = cellY + vLineLength;
+                        
+                        Handles.DrawAAPolyLine(outlineThickness,
+                            new Vector3(lineX, lineStartY, 0),
+                            new Vector3(lineX, lineEndY, 0)
+                        );
                     }
                 }
             }
@@ -1353,12 +1424,7 @@ namespace DEV.Editor
             }
             else
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("FrameShapes DB:", GUILayout.Width(120));
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField(frameShapes, typeof(FrameShapes), false);
-                EditorGUI.EndDisabledGroup();
-                EditorGUILayout.EndHorizontal();
+
                 EditorGUILayout.Space(5);
             }
             
